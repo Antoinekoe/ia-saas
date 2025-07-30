@@ -37,7 +37,7 @@ export const generateArticle = async (req, res) => {
     await sql`INSERT INTO creations (user_id, prompt, content, type)
     VALUES (${userId}, ${prompt}, ${content}, 'article')`;
 
-    if (plan !== premium) {
+    if (plan !== "premium") {
       await clerkClient.users.updateUserMetadata(userId, {
         privateMetadata: {
           free_usage: free_usage + 1,
