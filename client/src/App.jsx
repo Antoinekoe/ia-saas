@@ -15,6 +15,7 @@ import { useAuth } from "@clerk/clerk-react";
 const App = () => {
   const { getToken } = useAuth();
 
+  // Log authentication token for debugging
   useEffect(() => {
     getToken().then((token) => console.log(token));
   }, []);

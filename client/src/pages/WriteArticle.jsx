@@ -1,7 +1,8 @@
 import { Edit, Sparkles } from "lucide-react";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 const WriteArticle = () => {
+  // Article length options for user selection
   const articleLength = [
     { length: 800, text: "Short (500-800 words)" },
     { length: 1200, text: "Medium (800-1200 words)" },
@@ -11,6 +12,7 @@ const WriteArticle = () => {
   const [selectedLength, setSelectedLength] = useState(articleLength[0]);
   const [input, setInput] = useState("");
 
+  // Handle form submission for article generation
   const onSubmitHandler = async (e) => {
     e.preventDefault();
     console.log(e);
@@ -18,6 +20,7 @@ const WriteArticle = () => {
 
   return (
     <div className="h-full overflow-y-scroll p-6 flex items-start flex-wrap gap-4 text-slate-700">
+      {/* Article configuration form */}
       <form
         onSubmit={onSubmitHandler}
         className="w-full max-w-lg p-4 bg-white rounded-lg border border-gray-200"
@@ -36,6 +39,7 @@ const WriteArticle = () => {
           required
         />
         <p className="mt-4 text-sm font-medium">Article length</p>
+        {/* Length selection buttons */}
         <div className="mt-3 flex gap-3 flex-wrap sm:max-w-9/11">
           {articleLength.map((article, index) => (
             <span
@@ -52,11 +56,14 @@ const WriteArticle = () => {
           ))}
         </div>
         <br />
+        {/* Generate button */}
         <button className="w-full flex justify-center items-center gap-2 bg-gradient-to-r from-[#226BFF] to-[#65ADFF] text-white px-4 py-2 mt-6 text-sm rounded-lg cursor-pointer">
           <Edit className="w-5" />
           Generate article
         </button>
       </form>
+
+      {/* Generated article display area */}
       <div className="w-full max-w-lg p-4 bg-white rounded-lg flex flex-col border border-gray-200 min-h-96 max-h-[600px]">
         <div className="flex items-center gap-3">
           <Edit className="w-5 h-5 text-[#4A7AFF]" />

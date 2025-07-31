@@ -1,3 +1,4 @@
+// AI routes configuration
 import express from "express";
 import { auth } from "../middlewares/auth.js";
 import {
@@ -8,8 +9,9 @@ import {
 
 const aiRouter = express.Router();
 
-aiRouter.post("/generate-article", auth, generateArticle);
-aiRouter.post("/generate-blog-title", auth, generateBlogTitle);
-aiRouter.post("/generate-image", auth, generateImage);
+// AI generation endpoints - all protected by auth middleware
+aiRouter.post("/generate-article", auth, generateArticle); // Generate articles with AI
+aiRouter.post("/generate-blog-title", auth, generateBlogTitle); // Generate blog titles
+aiRouter.post("/generate-image", auth, generateImage); // Generate images (premium only)
 
 export default aiRouter;

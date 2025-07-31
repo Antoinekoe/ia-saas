@@ -1,14 +1,17 @@
+// AI Controller - Handles all AI generation requests
 import OpenAI from "openai";
 import sql from "../configs/db.js";
 import { clerkClient } from "@clerk/express";
 import axios from "axios";
 import { v2 as cloudinary } from "cloudinary";
 
+// Initialize OpenAI client with Gemini API
 const AI = new OpenAI({
   apiKey: process.env.GEMINI_API_KEY,
   baseURL: "https://generativelanguage.googleapis.com/v1beta/openai/",
 });
 
+// Generate article content using AI
 export const generateArticle = async (req, res) => {
   try {
     const { userId } = req.auth();
@@ -16,6 +19,7 @@ export const generateArticle = async (req, res) => {
     const plan = req.plan;
     const free_usage = req.free_usage;
 
+    // Check usage limits for free users
     if (plan !== "premium" && free_usage >= 10) {
       return res.json({
         success: false,
@@ -23,6 +27,7 @@ export const generateArticle = async (req, res) => {
       });
     }
 
+    // Generate content using Gemini AI
     const response = await AI.chat.completions.create({
       model: "gemini-2.0-flash",
       messages: [
@@ -40,6 +45,7 @@ export const generateArticle = async (req, res) => {
     await sql`INSERT INTO creations (user_id, prompt, content, type)
     VALUES (${userId}, ${prompt}, ${content}, 'article')`;
 
+    // Update usage count for free users
     if (plan !== "premium") {
       await clerkClient.users.updateUserMetadata(userId, {
         privateMetadata: {
@@ -55,6 +61,7 @@ export const generateArticle = async (req, res) => {
   }
 };
 
+// Generate blog titles using AI
 export const generateBlogTitle = async (req, res) => {
   try {
     const { userId } = req.auth();
@@ -62,6 +69,7 @@ export const generateBlogTitle = async (req, res) => {
     const plan = req.plan;
     const free_usage = req.free_usage;
 
+    // Check usage limits for free users
     if (plan !== "premium" && free_usage >= 10) {
       return res.json({
         success: false,
@@ -69,6 +77,7 @@ export const generateBlogTitle = async (req, res) => {
       });
     }
 
+    // Generate blog title using Gemini AI
     const response = await AI.chat.completions.create({
       model: "gemini-2.0-flash",
       messages: [
@@ -78,7 +87,7 @@ export const generateBlogTitle = async (req, res) => {
         },
       ],
       temperature: 0.7,
-      max_tokens: 100,
+      max_tokens: 100, // Shorter output for titles
     });
 
     const content = response.choices[0].message.content;
@@ -86,6 +95,7 @@ export const generateBlogTitle = async (req, res) => {
     await sql`INSERT INTO creations (user_id, prompt, content, type)
     VALUES (${userId}, ${prompt}, ${content}, 'blog-title')`;
 
+    // Update usage count for free users
     if (plan !== "premium") {
       await clerkClient.users.updateUserMetadata(userId, {
         privateMetadata: {
@@ -101,6 +111,7 @@ export const generateBlogTitle = async (req, res) => {
   }
 };
 
+// Generate images using AI (Premium feature only)
 export const generateImage = async (req, res) => {
   try {
     const { userId } = req.auth();
@@ -114,8 +125,11 @@ export const generateImage = async (req, res) => {
       });
     }
 
+    // Prepare form data for ClipDrop API
     const formData = new FormData();
     formData.append("prompt", prompt);
+
+    // Generate image using ClipDrop API
     const { data } = await axios.post(
       "https://clipdrop-api.co/text-to-image/v1",
       formData,
@@ -125,6 +139,7 @@ export const generateImage = async (req, res) => {
       }
     );
 
+    // Convert image to base64 for Cloudinary upload
     const base64Image = `data:image/png;base64,${Buffer.from(
       data,
       "binary"
