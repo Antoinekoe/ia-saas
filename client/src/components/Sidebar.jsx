@@ -47,7 +47,7 @@ const Sidebar = ({ sidebar, setSideBar }) => {
 
         {/* Navigation menu */}
         <div className="px-6 mt-5 text-sm text-gray-600 font-medium">
-          {navItems.map(({ to, label, Icon }) => (
+          {navItems.map(({ to, label }) => (
             <NavLink
               key={to}
               to={to}
