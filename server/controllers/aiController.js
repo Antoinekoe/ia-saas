@@ -162,7 +162,7 @@ export const generateImage = async (req, res) => {
 export const removeImageBackground = async (req, res) => {
   try {
     const { userId } = req.auth();
-    const { image } = req.file;
+    const image = req.file;
     const plan = req.plan;
 
     if (plan !== "premium") {
@@ -195,7 +195,7 @@ export const removeImageObject = async (req, res) => {
   try {
     const { userId } = req.auth();
     const { object } = req.body;
-    const { image } = req.file;
+    const image = req.file;
     const plan = req.plan;
 
     if (plan !== "premium") {
@@ -210,7 +210,7 @@ export const removeImageObject = async (req, res) => {
     const imageUrl = cloudinary.url(public_id, {
       transformation: [
         {
-          effect: `gen_remove: ${object}`,
+          effect: `gen_remove:${object}`,
         },
       ],
       ressource_type: "image",
@@ -241,7 +241,7 @@ export const resumeReview = async (req, res) => {
 
     if (resume.size > 5 * 1024 * 1024) {
       res.json({
-        succes: false,
+        success: false,
         message: "Resume file size exceeds allowed size (5MB).",
       });
     }
@@ -268,7 +268,7 @@ export const resumeReview = async (req, res) => {
     await sql`INSERT INTO creations (user_id, prompt, content, type)
     VALUES (${userId}, 'Review the uploaded resume', ${content}, 'resume-review')`;
 
-    res.json({ success: true });
+    res.json({ success: true, content });
   } catch (error) {
     console.group(error.message);
     res.json({ success: false, message: error.message });

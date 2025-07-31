@@ -24,7 +24,7 @@ const Layout = () => {
         {/* Mobile menu toggle */}
         {sidebar ? (
           <X
-            className="w-6 h-6 text-gray-600 sm:hidden"
+            className="w-6 h-6 text-gray-600 z-10000 sm:hidden"
             onClick={() => setSidebar(false)}
           />
         ) : (
