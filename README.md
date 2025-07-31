@@ -1,6 +1,6 @@
-# IA SaaS - AI-Powered Content Creation Platform
+# KalAI - AI SaaS - AI-Powered Content Creation Platform
 
-[![IA SaaS](screenshot-git.png)]()
+[![KalAI](./client/src/assets/screenshot-git.PNG)]()
 
 A comprehensive AI-powered SaaS platform that provides users with a suite of advanced content creation tools. Users can generate articles, blog titles, images, remove backgrounds, remove objects from images, and review resumes using cutting-edge AI technology. The platform features secure authentication, a modern React frontend, and a robust Node.js backend with AI integration.
 
