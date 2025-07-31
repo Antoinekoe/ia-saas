@@ -6,26 +6,29 @@ import {
   generateBlogTitle,
   generateImage,
   removeImageBackground,
+  removeImageObject,
+  resumeReview,
 } from "../controllers/aiController.js";
 import { upload } from "../configs/multer.js";
 
 const aiRouter = express.Router();
 
 // AI generation endpoints - all protected by auth middleware
-aiRouter.post("/generate-article", auth, generateArticle); // Generate articles with AI
-aiRouter.post("/generate-blog-title", auth, generateBlogTitle); // Generate blog titles
-aiRouter.post("/generate-image", auth, generateImage); // Generate images (premium only)
+aiRouter.post("/generate-article", auth, generateArticle);
+aiRouter.post("/generate-blog-title", auth, generateBlogTitle);
+aiRouter.post("/generate-image", auth, generateImage);
 aiRouter.post(
   "/remove-image-background",
   upload.single("image"),
   auth,
   removeImageBackground
-); // Generate images (premium only)
+);
 aiRouter.post(
-  "/remove-image-background",
+  "/remove-image-object",
   upload.single("image"),
   auth,
-  removeImageBackground
-); // Generate images (premium only)
+  removeImageObject
+);
+aiRouter.post("/resume-review", upload.single("resume"), auth, resumeReview);
 
 export default aiRouter;

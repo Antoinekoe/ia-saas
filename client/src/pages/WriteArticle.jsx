@@ -1,5 +1,8 @@
 import { Edit, Sparkles } from "lucide-react";
 import React, { useState } from "react";
+import axios from "axios";
+
+axios.defaults.baseURL = import.meta.env.VITE_BASE_URL;
 
 const WriteArticle = () => {
   // Article length options for user selection
@@ -11,6 +14,7 @@ const WriteArticle = () => {
 
   const [selectedLength, setSelectedLength] = useState(articleLength[0]);
   const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // Handle form submission for article generation
   const onSubmitHandler = async (e) => {
